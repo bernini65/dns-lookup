@@ -62,8 +62,9 @@ $(".submit").on("click", function(){
 
   hostnames = parseHostnames(text);
   if (submitted){
-    hostnameTable.html('');
-    ipTable.html('');
+      
+    hostnameTable.html('<tr><th>A Records</th><th></th></tr>');
+    ipTable.html('<tr><th>PTR Records</th><th></th></tr>');
   }
 
   if (hostnames){
@@ -72,9 +73,9 @@ $(".submit").on("click", function(){
       td= tr.children().eq(1)
       getAns(td, hostname, "A");
     });
-    hostnamePanel.show();
+    hostnameTable.show();
   }  else {
-    ippanel.hide();
+    hostnameTable.hide();
   }
 
   ips = parseIPs(text);
@@ -86,10 +87,10 @@ $(".submit").on("click", function(){
     });
 
     //$(".results").slideDown(300);
-    ipPanel.show();
+    ipTable.show();
 
   } else {
-    ipPanel.hide();
+    ipTable.hide();
   }
   submitted = true;
 
@@ -97,6 +98,6 @@ $(".submit").on("click", function(){
 
 
 var submitted = false;
- var text = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2";
+ var text = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
 
  $("#query").val(text);
