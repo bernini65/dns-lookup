@@ -1,0 +1,86 @@
+body {
+ # display:block;
+  font: 1.5em/0.6em "OpenSansRegular", Helvetica, Arial, sans-serif;
+  #color: #bebebe;
+ # text-transform:lowercase;
+  
+
+
+}
+
+h1 {
+  display:block;
+  font: bold 3.2em/0.8em "OpenSansRegular", Helvetica, Arial, sans-serif;
+  color: #bebebe;
+  text-transform:uppercase;
+  text-align:center;
+}
+.line {
+
+  border-bottom: 1px solid #e5e5e5;
+  margin-left: 15px;
+  margin-right: 15px;
+
+  display: block;
+  height: 15px;
+  clear:both;
+}
+
+.ip-panel, .hostname-panel { 
+  display:none;
+
+}
+.panel-body {
+  padding-top:2px;
+  padding-bottom: 0px;
+}
+
+.panel {
+  padding-bottom:0px;
+}
+
+
+.table > tbody > tr:first-child >td{
+  border-top:0px;
+}
+.table > tbody > tr >td{
+  padding:4px;
+}
+.table {
+  margin-bottom:4px;
+}
+/*.query-container {
+  margin-bottom:60px;
+}*/
+td { 
+  white-space:pre 
+
+}
+
+.submit-container {
+  display: block;
+}
+.results {
+  margin-top: 60px;
+  #display:none;
+}
+
+.panel-heading {
+  font-weight: bold;
+}
+.pull-right{
+  display:block;
+}
+
+.block {
+  display:block;
+}
+
+.clear {
+  clear:both;
+  margin-top: 50px;
+}
+
+.space {
+  height: 200px;
+}
