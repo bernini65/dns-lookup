@@ -15,6 +15,10 @@ h1 {
   text-transform:uppercase;
   text-align:center;
 }
+
+.heading-container {
+  margin-top:0px;
+}
 .line {
 
   border-bottom: 1px solid #e5e5e5;
@@ -44,7 +48,7 @@ h1 {
   border-top:0px;
 }
 .table > tbody > tr >td{
-  padding:4px;
+  padding:6px;
 }
 .table {
   margin-bottom:4px;
@@ -62,11 +66,10 @@ td {
 }
 .results {
   margin-top: 60px;
-  #display:none;
 }
 
 .panel-heading {
-  font-weight: bold;
+  font-size: 1.1em;
 }
 .pull-right{
   display:block;
@@ -84,3 +87,29 @@ td {
 .space {
   height: 200px;
 }
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 730px;
+  }
+
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+s

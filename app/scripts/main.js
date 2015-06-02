@@ -28,54 +28,8 @@ function getAns(context, question, type){
     });
 
 
- }
+}
 
-// function getIps(context, ip){
-
-//   inAddr = ip.split(".").reverse().join(".") + ".in-addr.arpa"
-//   $.ajax({
-//       url: 'http://api.statdns.com/' + inAddr + '/ptr',
-//       dataType: 'jsonp',
-//       success: function(response){
-
-//         res = response.answer.reduce(function(prev, cur, elem){
-//           return prev + cur.rdata.toString() +  "\n"
-//         }, "");
-        
-//         context.text(res);
-  
-        
-//       },
-//       error: function(xhr, status, error){
-//         console.log('error');        
-//      }
-//   });
-
-
-// }
-
-// function getHostnames(context, hostname){
-
-//   $.ajax({
-//       url: 'http://api.statdns.com/' + hostname + '/a',
-//       dataType: 'jsonp',
-//       success: function(response){
-
-//         res = response.answer.reduce(function(prev, cur, elem){
-//           return prev + cur.rdata.toString() +  "\n"
-//         }, "");
-        
-//         context.text(res);
-  
-        
-//       },
-//       error: function(xhr, status, error){
-//         console.log('error');        
-//      }
-//   });
-
-
-// }
 function parseHostnames(text){
 
   pattern = /\b(\w+\.)+(ca|com)\b/g;
@@ -113,9 +67,7 @@ $(".submit").on("click", function(){
   }
 
   if (hostnames){
-
     hostnames.forEach(function(hostname){
-
       tr = addRow(hostnameTable, hostname, "<i class='fa fa-spinner fa-spin'></i>");
       td= tr.children().eq(1)
       getAns(td, hostname, "A");
@@ -124,8 +76,6 @@ $(".submit").on("click", function(){
   }  else {
     ippanel.hide();
   }
-
-
 
   ips = parseIPs(text);
   if (ips){
@@ -147,18 +97,6 @@ $(".submit").on("click", function(){
 
 
 var submitted = false;
-var text = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2";
+ var text = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2";
 
-$("#query").val(text);
-//$(".panel").hide();
-// $(".panel").slideDown("slow", function(){
-// });
-
-//parseHostnames(text)
-
-//ips = getIps("msn.ca");
-// ips = getIps("ubc.ca");
-// ips = getIps("ccienotes.com");
-// ips = getIps("google.com");
-// ips = getIps("amazon.ca");
-//console.log(ips);
+ $("#query").val(text);
