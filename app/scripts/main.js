@@ -105,6 +105,6 @@ $(".submit").on("click", function(){
 
 
   submitted = false;
- var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
+ //var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
 
- $("#query").val(text2);
+ //$("#query").val(text2);
