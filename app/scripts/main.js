@@ -1,5 +1,8 @@
 "use strict";
-var submitted;
+var hostnames=[],
+  ips= [],
+  prevHostnames = [],
+  prevIps = [];
 function getAns(context, question, type){
   var url,
     res;
@@ -17,7 +20,7 @@ function getAns(context, question, type){
         success: function(response){
 
           res = response.answer.reduce(function(prev, cur){
-            return prev + cur.rdata.toString() +  "\n";
+            return prev + cur.rdata.slice(0,cur.rdata.length - 1) +  "\n";
           }, "");
           
           context.text(res);
@@ -38,7 +41,7 @@ function parseHostnames(text){
   pattern = /\b(\w+\.)+(ca|com)\b/g;
 
   matches = text.match(pattern);
-  return matches;
+  return matches || [];
   
 }
 function parseIPs(text){
@@ -46,7 +49,7 @@ function parseIPs(text){
     matches;
   pattern = /\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
   matches = text.match(pattern);
-  return matches;
+  return matches || [];
 
 }
 function addRow(table, first, second) {
@@ -57,54 +60,64 @@ function addRow(table, first, second) {
   return tr;
 }
 
-$(".submit").on("click", function(){
-  var hostnames,
-    tr,
-    td,
-    ips,
-    text;
-  text = $("#query").val();
+function reset() {
+  $("#query").val("");
+  $(".hostnameTable").hide();
+  $(".ipTable").hide();
+  $(".hostnameTable").html("<tr><th>A Records</th><th></th></tr>");
+  $(".ipTable").html("<tr><th>PTR Records</th><th></th></tr>");
+  ips = [];
+  hostnames = [];
+  prevIps = [];
+  prevHostnames = [];
+}
 
-  var hostnameTable = $(".hostnameTable");
+$("#query").on("input", function(){
+  var text,
+
+    ipDiff,
+    hostnameDiff,
+    tr,
+    td;
+  var self = $("#query");
+    var hostnameTable = $(".hostnameTable");
   var ipTable = $(".ipTable");
 
-  hostnames = parseHostnames(text);
-  if (submitted){
-      
-    hostnameTable.html("<tr><th>A Records</th><th></th></tr>");
-    ipTable.html("<tr><th>PTR Records</th><th></th></tr>");
+  var pattern = /^\s*$/;
+  if (self.val().match(pattern)){
+
+    reset();
+  } 
+  else {
+    prevHostnames = _.clone(hostnames);
+    prevIps = _.clone(ips);
+    text = $("#query").val();
+    hostnames = parseHostnames(text);
+    ips = parseIPs(text);
+    ipDiff = _.difference(ips, prevIps);
+    hostnameDiff = _.difference(hostnames, prevHostnames);
+
+    if (hostnameDiff.length > 0){
+      hostnameDiff.forEach(function(hostname){
+        tr = addRow(hostnameTable, hostname, "<i class='fa fa-spinner fa-spin'></i>");
+        td= tr.children().eq(1);
+        getAns(td, hostname, "A");
+      });
+      hostnameTable.show();
+    }
+    if (ipDiff.length > 0){
+      ipDiff.forEach(function(ip){
+        tr = addRow(ipTable, ip, "<i class='fa fa-spinner fa-spin'></i>");
+        td= tr.children().eq(1);
+        getAns(td, ip, "PTR");
+      });
+      ipTable.show();
+    }
+
   }
-
-  if (hostnames){
-    hostnames.forEach(function(hostname){
-      tr = addRow(hostnameTable, hostname, "<i class='fa fa-spinner fa-spin'></i>");
-      td= tr.children().eq(1);
-      getAns(td, hostname, "A");
-    });
-    hostnameTable.show();
-  }  else {
-    hostnameTable.hide();
-  }
-
-  ips = parseIPs(text);
-  if (ips){
-    ips.forEach(function(ip){
-      tr = addRow(ipTable, ip, "");
-      td= tr.children().eq(1);
-      getAns(td, ip, "PTR");
-    });
-
-    ipTable.show();
-
-  } else {
-    ipTable.hide();
-  }
-  submitted = true;
-
 });
 
-
-  submitted = false;
- //var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
-
- //$("#query").val(text2);
+ var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
+// var a = [1,2,3,4]
+// var b = _.clone(a);
+ $("#query").val(text2);
