@@ -32,6 +32,9 @@ h1 {
   height: 15px;
   clear:both;
 }
+.red {
+  color: red;
+}
 
 .ip-panel, .hostname-panel { 
   display:none;
@@ -100,6 +103,12 @@ td {
   height: 200px;
 }
 
+.startover{
+  display: block;
+  text-align:center;
+  display:none;
+  margin-top: 30px;
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {

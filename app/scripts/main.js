@@ -20,7 +20,12 @@ function getAns(context, question, type){
         success: function(response){
 
           res = response.answer.reduce(function(prev, cur){
-            return prev + cur.rdata.slice(0,cur.rdata.length - 1) +  "\n";
+            if (cur.type === type){
+              return prev + cur.rdata.slice(0,cur.rdata.length - 1) +  "\n";
+            }
+            else {
+              return prev;
+            }
           }, "");
           
           context.text(res);
@@ -28,7 +33,8 @@ function getAns(context, question, type){
           
         },
         error: function(){
-          console.log("error");        
+          context.text(type + " record not found");     
+          context.addClass("red");   
        }
     });
 
@@ -38,8 +44,8 @@ function getAns(context, question, type){
 function parseHostnames(text){
   var pattern,
     matches;
-  pattern = /\b(\w+\.)+(ca|com)\b/g;
-
+  //pattern = /\b(\w+\.)+(ca|com)\b/g;
+  pattern = /\b(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?\b/ig;
   matches = text.match(pattern);
   return matches || [];
   
@@ -104,6 +110,7 @@ $("#query").on("input", function(){
         getAns(td, hostname, "A");
       });
       hostnameTable.show();
+      $(".startover").show();
     }
     if (ipDiff.length > 0){
       ipDiff.forEach(function(ip){
@@ -112,12 +119,14 @@ $("#query").on("input", function(){
         getAns(td, ip, "PTR");
       });
       ipTable.show();
+      $(".startover").show();
+
     }
 
   }
 });
 
- var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
+ //var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";
 // var a = [1,2,3,4]
 // var b = _.clone(a);
- $("#query").val(text2);
+ //$("#query").val(text2);
