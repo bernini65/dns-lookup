@@ -2,7 +2,11 @@
 var hostnames=[],
   ips= [],
   prevHostnames = [],
-  prevIps = [];
+  prevIps = [],
+  prevText = "",
+  textLength=0,
+  prevLength=0,
+  lengthDiff=0;
 function getAns(context, question, type){
   var url,
     res;
@@ -21,7 +25,16 @@ function getAns(context, question, type){
 
           res = response.answer.reduce(function(prev, cur){
             if (cur.type === type){
-              return prev + cur.rdata.slice(0,cur.rdata.length - 1) +  "\n";
+
+              //remove trailing period for ptr records
+              if (cur.type === "PTR"){
+                return prev + cur.rdata.slice(0,cur.rdata.length - 1) +  "\n";
+
+              }
+              else {
+                return prev + cur.rdata +  "\n";
+
+              }
             }
             else {
               return prev;
@@ -45,7 +58,8 @@ function parseHostnames(text){
   var pattern,
     matches;
   //pattern = /\b(\w+\.)+(ca|com)\b/g;
-  pattern = /\b(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.[a-zA-Z]{2,6}?\b/ig;
+
+  pattern = /\b(?!:\/\/)([a-zA-Z0-9]+\.)?[a-zA-Z0-9][a-zA-Z0-9-]+\.(com|net|ru|org|de|uk|jp|br|pl|in|it|fr|info|cn|au|nl|ir|biz|es|cz|kr|eu|ca|ua|za|co|gr|ro|se|mx|tw|ch|at|dk|tv|vn|be|me|tr|us|hu|ar|no|sk|fi|cl|id|cc|nz|pt|il|by|ie|my|kz|sg|hk|edu|lt|io|su|pk|bg|th|tk|az|pe|lv|hr|ae|ph|mobi|rs|si|ws|xyz|pro|ee)\b/ig;
   matches = text.match(pattern);
   return matches || [];
   
@@ -61,7 +75,7 @@ function parseIPs(text){
 function addRow(table, first, second) {
   var template,
     tr;
-  template = "<tr><td class='col-md-6'>" + first + "</td><td class='col-md-6'>"+ second + "</td></tr>";
+  template = "<tr><td class='col-md-6'>" + first + "</td><td  class='col-md-6'>"+ second + "</td></tr>";
   tr = $(template).appendTo(table);
   return tr;
 }
@@ -70,23 +84,24 @@ function reset() {
   $("#query").val("");
   $(".hostnameTable").hide();
   $(".ipTable").hide();
-  $(".hostnameTable").html("<tr><th>A Records</th><th></th></tr>");
+  $(".hostnameTable").html("<tr><th class='col-md-6'>A Records</th><th class='col-md-6'></th></tr>");
   $(".ipTable").html("<tr><th>PTR Records</th><th></th></tr>");
   ips = [];
   hostnames = [];
   prevIps = [];
   prevHostnames = [];
+  $(".startover").hide();
 }
 
 $("#query").on("input", function(){
-  var text,
-
+  var text="",
     ipDiff,
     hostnameDiff,
+    textDiff,
     tr,
     td;
   var self = $("#query");
-    var hostnameTable = $(".hostnameTable");
+  var hostnameTable = $(".hostnameTable");
   var ipTable = $(".ipTable");
 
   var pattern = /^\s*$/;
@@ -97,9 +112,25 @@ $("#query").on("input", function(){
   else {
     prevHostnames = _.clone(hostnames);
     prevIps = _.clone(ips);
+    prevLength = textLength;
     text = $("#query").val();
+    textLength = text.length;
+ 
+    lengthDiff = textLength - prevLength;
+
+    //if user is typing (and not pasting), only continue if a non letter or period is encountered
+    if ((lengthDiff === 1) && (text[text.length-1].match(/(\w|\.)/))){
+        return;
+    }
+
+
     hostnames = parseHostnames(text);
     ips = parseIPs(text);
+
+    //remove duplicate hostnames and ips
+    hostnames = _.uniq(hostnames);
+    ips = _.uniq(ips);
+
     ipDiff = _.difference(ips, prevIps);
     hostnameDiff = _.difference(hostnames, prevHostnames);
 
@@ -124,6 +155,10 @@ $("#query").on("input", function(){
     }
 
   }
+});
+
+$("button").on("click", function(){
+  reset();
 });
 
  //var text2 = "msn.ca ubc.ca\namazon.ca it.ubc.ca 137.82.1.2\n8.8.8.8";

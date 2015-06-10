@@ -10,19 +10,21 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
 <!--     <link rel="stylesheet" href="styles/main.css">
  -->    <link rel="stylesheet" href="styles/dns-lookup.css">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <!-- endbuild -->
+<!--     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+ -->    <!-- endbuild -->
   </head>
   <body>
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+   
 <div class="heading-container">
 <h1>DNS Lookup</h1>
 </div>
@@ -47,7 +49,7 @@
 
     </div>
 <div class="startover">
-    <button class="btn btn-default" onClick="window.location.reload()">Start Over</button>
+    <button class="btn btn-default" id="startover">Start Over</button>
     </div>
 
 </div>
